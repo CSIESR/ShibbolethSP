@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  httpd:
+    build: .
+    container_name: forshib
+    #    privileged: true
+    ports:
+      - "82:80"
+    restart: always
+    hostname: formaac.csiesr.eu
+    #    domainname: csiesr.eu
+    volumes:
+ #      - ./shibboleth:/etc/shibboleth:cached
+      - ./formac.conf:/etc/httpd/conf.d/formac.conf
+ #networks:
+ # si_csiesr_default:
+ #   external: true

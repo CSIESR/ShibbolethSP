@@ -1,0 +1,51 @@
+<SPConfig xmlns="urn:mace:shibboleth:3.0:native:sp:config"
+    xmlns:conf="urn:mace:shibboleth:3.0:native:sp:config"
+    clockSkew="180">
+    <OutOfProcess logger="shibd.logger" tranLogFormat="%u|%s|%IDP|%i|%ac|%t|%attr|%n|%b|%E|%S|%SS|%L|%UA|%a">
+    </OutOfProcess>
+    <ApplicationDefaults entityID="https://formaac.csiesr.eu/"
+        REMOTE_USER="eppn subject-id pairwise-id persistent-id"
+        cipherSuites="DEFAULT:!EXP:!LOW:!aNULL:!eNULL:!DES:!IDEA:!SEED:!RC4:!3DES:!kRSA:!SSLv2:!SSLv3:!TLSv1:!TLSv1.1">
+        <Sessions lifetime="28800" timeout="3600" checkAddress="false"
+            handlerURL="/Shibboleth.sso" handlerSSL="true" cookieProps="https" relayState="ss:mem"
+	    redirectLimit="exact">
+            <SSO discoveryProtocol="SAMLDS" discoveryURL="https://discovery.renater.fr/renater/WAYF?cru=yes">
+              SAML2
+            </SSO>
+            <LogoutInitiator type="Admin" Location="/Logout/Admin" acl="127.0.0.1 ::1" />
+            <Handler type="MetadataGenerator" Location="/Metadata" signing="false"/>
+            <Handler type="Status" Location="/Status" acl="127.0.0.1 ::1"/>
+            <Handler type="Session" Location="/Session" showAttributeValues="false"/>
+            <Handler type="DiscoveryFeed" Location="/DiscoFeed"/>
+        </Sessions>
+        <Errors supportContact="root@localhost"
+            metadata="metadataError_fr.html"
+            access="accessError_fr.html"
+            ssl="sslError_fr.html"
+            localLogout="localLogout_fr.html"
+            globalLogout="globalLogout_fr.html"
+            helpLocation="/about.html"
+            styleSheet="/shibboleth-sp/main.css"/>
+            <AttributeExtractor type="XML" validate="true" reloadChanges="false" path="attribute-map.xml"/>
+            <AttributeFilter type="XML" validate="true" path="attribute-policy.xml"/>
+        <MetadataProvider type="Chaining">
+          <!-- Meta-donnees de la federation Education-Recherche -->
+          <MetadataProvider type="XML" url="https://pub.federation.renater.fr/metadata/renater/main/main-all-renater-metadata.xml"
+              backingFilePath="/etc/shibboleth/main-all-renater-metadata.xml" reloadInterval="7200">
+	      <MetadataFilter type="Signature" certificate="renater-metadata-signing-cert-2016.pem"/>
+          </MetadataProvider>
+          <!-- Meta-donnees des comptes CRU -->
+          <MetadataProvider type="XML"
+              url="https://cru.renater.fr/idp/shibboleth"
+              backingFilePath="/var/cache/shibboleth/sac-metadata.xml"
+              reloadInterval="7200">
+          </MetadataProvider>
+        </MetadataProvider>
+        <CredentialResolver type="File" use="signing"
+            key="sp-signing-key.pem" certificate="sp-signing-cert.pem"/>
+        <CredentialResolver type="File" use="encryption"
+            key="sp-encrypt-key.pem" certificate="sp-encrypt-cert.pem"/>
+    </ApplicationDefaults>
+    <SecurityPolicyProvider type="XML" validate="true" path="security-policy.xml"/>
+    <ProtocolProvider type="XML" validate="true" reloadChanges="false" path="protocols.xml"/>
+</SPConfig>
