@@ -1,2 +1,2 @@
 # ShibbolethSP
-container SP pour le WAIF Renater
+container SP pour Renater
