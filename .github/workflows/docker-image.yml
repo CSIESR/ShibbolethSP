@@ -16,11 +16,13 @@ jobs:
     steps:
       - name: "action"
         uses: actions/checkout@master
-      - name: Get current date # get la date du build
-        id: date  - name: docker login
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
-      - name: connexion, build et puch to dockerhub
+      - name: docker login
         run: |
-          docker login -u kiterfoo -p 65fea777-ad19-48b5-84e0-61f91356a72c # login to dockerhub
-          docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
-          docker push $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
+          docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }} # login to dockerhub
+      - name: Get current date # get la date du build
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
+      - name: Build the Docker image # push The image to the docker hub
+        run: docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
+      - name: Docker Push
+        run: docker push $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }}
