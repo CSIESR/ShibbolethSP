@@ -22,5 +22,5 @@ jobs:
       - name: connexion, build et puch to dockerhub
         run: |
           docker login -u kiterfoo -p 65fea777-ad19-48b5-84e0-61f91356a72c # login to dockerhub
-          docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }} #construction du contener
-          docker push $DOCKER_USER/$REPO_NAME:${{ steps.date.outputs.date }} #puch du contener vers dockerhub
+          docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:latest #construction du contener
+          docker push $DOCKER_USER/$REPO_NAME #puch du contener vers dockerhub
