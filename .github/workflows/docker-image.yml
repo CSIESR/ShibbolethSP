@@ -17,7 +17,7 @@ jobs:
       - name: "action"
         uses: actions/checkout@master
       - name: Get current date # get la date du build
-        id: date  - name: docker login
+        id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
       - name: connexion, build et puch to dockerhub
         run: |
