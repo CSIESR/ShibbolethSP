@@ -4,11 +4,6 @@ on:
     branches: [ kiterfoo-a-effacer ]
   pull_request:
     branches: [ kiterfoo-a-effacer ]
-#Variable d'env de git pour se connecter au repository du docker hub
-env:
-  DOCKER_USER: ${{secrets.DOCKER_USER}}
-  DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-  REPO_NAME: ${{secrets.REPO_NAME}}
 jobs:
  # push-image-to-docker-hub:  # job name
   build:
@@ -21,7 +16,7 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
       - name: connexion, build et puch to dockerhub
         run: |
-          echo $DOCKER_USER"/"$REPO_NAME
-          docker login -u kiterfoo -p 65fea777-ad19-48b5-84e0-61f91356a72c # login to dockerhub
-          docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:latest #construction du contener
-          docker push $DOCKER_USER/$REPO_NAME #puch du contener vers dockerhub
+          echo $DOCKER_HUB_USERNAME"/shibbolethsp"
+          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_ACCESS_TOKEN # login to dockerhub
+          docker build . --file Dockerfile --tag $DOCKER_USER/shibbolethsp:latest #construction du contener
+          docker push $DOCKER_USER/shibbolethsp #puch du contener vers dockerhub
