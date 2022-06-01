@@ -21,6 +21,7 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
       - name: connexion, build et puch to dockerhub
         run: |
+          echo $DOCKER_USER"/"$REPO_NAME
           docker login -u kiterfoo -p 65fea777-ad19-48b5-84e0-61f91356a72c # login to dockerhub
           docker build . --file Dockerfile --tag $DOCKER_USER/$REPO_NAME:latest #construction du contener
           docker push $DOCKER_USER/$REPO_NAME #puch du contener vers dockerhub
