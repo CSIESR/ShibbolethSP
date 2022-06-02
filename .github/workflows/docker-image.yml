@@ -16,7 +16,7 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d--%M-%S')"
       - name: connexion, build et puch to dockerhub
         run: |
-          echo $DOCKER_HUB_USERNAME"/shibbolethsp"
+          echo ${{ secrets.DOCKER_HUB_USERNAME }}"/shibbolethsp"
           echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-          docker build . --file Dockerfile --tag secrets.$DOCKER_USER/shibbolethsp:latest #construction du contener
-          docker push secrets.$DOCKER_USER/shibbolethsp #puch du contener vers dockerhub
+          docker build . --file Dockerfile --tag ${{ secrets.DOCKER_USER }}/shibbolethsp:latest #construction du contener
+          docker push ${{ secrets.DOCKER_USER }}/shibbolethsp #puch du contener vers dockerhub
