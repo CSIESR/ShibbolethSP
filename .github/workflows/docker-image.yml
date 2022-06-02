@@ -17,6 +17,6 @@ jobs:
       - name: connexion, build et puch to dockerhub
         run: |
           echo $DOCKER_HUB_USERNAME"/shibbolethsp"
-          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_ACCESS_TOKEN # login to dockerhub
-          docker build . --file Dockerfile --tag $DOCKER_USER/shibbolethsp:latest #construction du contener
-          docker push $DOCKER_USER/shibbolethsp #puch du contener vers dockerhub
+          echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+          docker build . --file Dockerfile --tag secrets.$DOCKER_USER/shibbolethsp:latest #construction du contener
+          docker push secrets.$DOCKER_USER/shibbolethsp #puch du contener vers dockerhub
